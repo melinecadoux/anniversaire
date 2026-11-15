@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Les 25 ans de Méline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;900&family=Instrument+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Concept : une invitation plein orange Aperol, un énorme chiffre crème en 3D, un ruban pêche qui défile, un billet crème pour les infos. Une seule palette assumée, thème unique. */
+  :root {
+    --blue: #ff6a1a;
+    --blue-deep: #b82a00;
+    --cream: #fff4e0;
+    --ink: #3b0d00;
+    --yellow: #ffe27a;
+    --pink: #ffc9a0;
+    --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+    --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(58rem 38rem at 88% -6%, #ffab57 0%, rgba(255, 171, 87, 0) 62%),
+      radial-gradient(46rem 36rem at -12% 38%, #f04400 0%, rgba(240, 68, 0, 0) 60%),
+      var(--blue);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  .wrap {
+    max-width: 62rem;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; }
+
+  /* Intro : écran noir puis apparition progressive. Tout reste visible si l'animation ne tourne pas. */
+  #intro {
+    position: fixed; inset: 0; z-index: 60; background: #000; display: grid; place-items: center;
+    animation: intro-out 3.6s ease forwards;
+  }
+  #intro span {
+    font-family: var(--font-display); font-weight: 600; font-size: clamp(.8rem, 3vw, 1.1rem);
+    letter-spacing: .4em; text-transform: uppercase; color: var(--blue);
+    animation: intro-text 3.6s ease forwards;
+  }
+  @keyframes intro-out { 0%, 55% { opacity: 1; visibility: visible; } 99% { opacity: 0; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+  @keyframes intro-text { 0% { opacity: 0; } 16% { opacity: 1; } 46% { opacity: 1; } 58% { opacity: 0; } 100% { opacity: 0; } }
+  @keyframes appear { from { opacity: 0; transform: translateY(1.5rem); } }
+  .hero .eyebrow, .hero h1 .small, .hero h1 .big, .hero .lede, .hero .date, .hero .actions, .bubbles {
+    animation-name: appear; animation-duration: 1s; animation-timing-function: ease; animation-fill-mode: backwards;
+  }
+  .hero .eyebrow { animation-delay: 2.1s; }
+  .hero h1 .small:first-child { animation-delay: 2.3s; }
+  .hero h1 .big { animation-delay: 2.5s; animation-duration: 1.3s; }
+  .hero h1 .small:last-child { animation-delay: 2.8s; }
+  .hero .lede { animation-delay: 3s; }
+  .hero .date { animation-delay: 3.2s; }
+  .hero .actions { animation-delay: 3.4s; }
+  .bubbles { animation-delay: 2.2s; animation-duration: 2s; }
+
+  /* Hero */
+  .hero { padding-block: 2.5rem 3rem; text-align: left; position: relative; }
+  .bubbles { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; margin-left: -50vw; overflow: hidden; pointer-events: none; }
+  .bubbles i {
+    position: absolute; left: var(--x); top: var(--y); width: var(--d); height: var(--d); border-radius: 50%;
+    background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, .85) 0 8%, rgba(255, 244, 224, .22) 9% 100%);
+    box-shadow: inset 0 0 0 1.5px rgba(255, 244, 224, .6);
+    animation: rise var(--t) linear var(--delay) infinite;
+  }
+  @keyframes rise {
+    0%   { top: 105%; opacity: 0; transform: translateX(0); }
+    10%  { opacity: 1; }
+    50%  { transform: translateX(var(--sway)); }
+    85%  { opacity: 1; }
+    100% { top: -8%; opacity: 0; transform: translateX(0); }
+  }
+  .date {
+    position: relative; overflow: hidden; display: inline-flex; flex-direction: column; gap: .25rem; max-width: 100%;
+    margin-top: 1.5rem; padding: 1.1rem 1.6rem 1.2rem; border-radius: 1.2rem;
+    background: linear-gradient(160deg, #4d1100, #260700); color: var(--cream);
+    transform: rotate(-2deg); box-shadow: .45rem .45rem 0 var(--blue-deep);
+    font-family: var(--font-display); text-transform: uppercase;
+  }
+  .date::after {
+    content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 226, 122, .35) 50%, transparent 65%);
+    animation: shine 4.5s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+  .date .d1, .date .d3 { font-weight: 600; font-size: .85rem; letter-spacing: .32em; }
+  .date .d3 { color: var(--yellow); }
+  .date .d2 {
+    font-weight: 900; font-size: clamp(1.6rem, 7.4vw, 3.6rem); line-height: 1.05; letter-spacing: -.02em; color: var(--yellow);
+    text-shadow: 0 0 .55em rgba(255, 226, 122, .5), .06em .06em 0 #ff6a1a;
+  }
+  .date .yr { color: var(--cream); text-shadow: .06em .06em 0 #ff6a1a; }
+  .hero > *:not(.bubbles) { position: relative; }
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-display); font-weight: 600; font-size: .72rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    background: var(--cream); color: var(--ink);
+    padding: .55rem .9rem; border-radius: 99px; margin: 0;
+  }
+  h1 { margin: 1.25rem 0 0; font-family: var(--font-display); font-weight: 900; line-height: .9; text-transform: uppercase; }
+  h1 .small { display: block; font-size: clamp(1.4rem, 6vw, 2.8rem); letter-spacing: -.01em; }
+  h1 .big {
+    display: block; color: var(--cream);
+    font-size: clamp(7rem, 38vw, 22rem); line-height: .82; letter-spacing: -.06em;
+    margin-left: -.04em;
+    text-shadow: .03em .03em 0 var(--pink), .06em .06em 0 var(--blue-deep);
+    cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+    transition: transform .2s ease;
+  }
+  h1 .big:hover { transform: rotate(-2deg) scale(1.02); }
+  .lede { max-width: 34rem; font-size: 1.15rem; margin: 1.75rem 0 0; }
+  .lede strong { background: var(--cream); padding: 0 .3em; border-radius: .25em; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
+  .btn {
+    font: 700 1rem/1 var(--font-body); cursor: pointer; text-decoration: none;
+    border: 0; border-radius: 99px; padding: 1rem 1.5rem;
+    background: var(--yellow); color: var(--ink);
+    box-shadow: 0 .3rem 0 var(--blue-deep);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 .45rem 0 var(--blue-deep); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--blue-deep); }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+  .btn.ghost:hover { box-shadow: inset 0 0 0 2px var(--cream); color: var(--cream); }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  /* Ruban */
+  .ribbon-clip { overflow: hidden; padding-block: 1.2rem; }
+  .ribbon {
+    background: var(--pink); color: var(--ink);
+    transform: rotate(-2deg); width: 110%; margin-left: -5%;
+    overflow: hidden; white-space: nowrap;
+    font-family: var(--font-display); font-weight: 900; text-transform: uppercase;
+    font-size: clamp(1rem, 3.4vw, 1.5rem); padding: .8rem 0;
+  }
+  .ribbon-track { display: inline-flex; animation: slide 28s linear infinite; }
+  .ribbon-track span { padding-right: 2rem; flex: none; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* Bande sombre */
+  .band {
+    background: linear-gradient(165deg, #4d1100 0%, #260700 100%); color: var(--cream);
+    padding-block: 4.5vw;
+    clip-path: polygon(0 3.5vw, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+  }
+  .band section { padding-block: 2rem; }
+  .band .tile { background: rgba(255, 244, 224, .08); box-shadow: inset 0 0 0 1px rgba(255, 244, 224, .22); }
+
+  /* Compte à rebours */
+  section { padding-block: 3rem; }
+  h2 {
+    font-family: var(--font-display); font-weight: 900; text-transform: uppercase;
+    font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1; margin: 0 0 1.5rem; text-wrap: balance;
+  }
+  .count { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+  .tile {
+    background: var(--blue-deep); color: var(--cream); border-radius: 1.1rem; padding: 1rem .5rem; text-align: center; min-width: 0;
+  }
+  .tile b {
+    display: block; font-family: var(--font-display); font-weight: 900; color: var(--yellow);
+    font-size: clamp(1.8rem, 8vw, 3.6rem); line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .tile span { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+  .count-note { margin: 1rem 0 0; font-weight: 500; }
+
+  /* Billet */
+  .ticket {
+    background: var(--cream); color: var(--ink);
+    border-radius: 1.5rem; padding: clamp(1.25rem, 4vw, 2.25rem);
+    position: relative; box-shadow: .5rem .5rem 0 var(--blue-deep);
+  }
+  .ticket h2 { color: var(--ink); }
+  .rows { display: grid; gap: 0; margin: 0; }
+  .row {
+    display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem;
+    padding-block: 1rem; border-top: 2px dashed rgba(11, 17, 96, .35);
+  }
+  .row dt { font-family: var(--font-display); font-weight: 600; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; padding-top: .3rem; }
+  .row dd { margin: 0; font-size: 1.1rem; font-weight: 500; overflow-wrap: anywhere; }
+  .row dd em { font-style: normal; font-weight: 700; background: var(--yellow); padding: 0 .3em; border-radius: .25em; }
+
+  /* Top 3 musiques et personnes confirmées : listes à remplir ici, la section reste cachée tant qu'elle est vide */
+  var TOP3 = [];
+  var CONFIRMES = [];
+  function fill(listId, secId, items) {
+    if (!items.length) return;
+    var ul = document.getElementById(listId);
+    items.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    document.getElementById(secId).hidden = false;
+  }
+  fill("top", "sec-top", TOP3);
+  fill("who", "sec-who", CONFIRMES);
+
+  /* Réponse */
+  .guests { display: grid; gap: .6rem; margin-top: .9rem; }
+  .guests label { font-weight: 500; margin: 0 0 .2rem; font-size: .95rem; }
+  .deadline { margin: -.75rem 0 1.5rem; font-size: 1.1rem; font-weight: 500; }
+  .deadline strong { background: var(--ink); color: var(--yellow); padding: .1em .5em; border-radius: .4em; }
+  form { display: grid; gap: 1.25rem; max-width: 36rem; }
+  label, legend { font-weight: 700; display: block; margin-bottom: .4rem; padding: 0; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  input[type=text], select, textarea {
+    width: 100%; font: 500 1rem/1.4 var(--font-body);
+    background: var(--cream); color: var(--ink);
+    border: 3px solid var(--cream); border-radius: .9rem; padding: .85rem 1rem;
+  }
+  textarea { resize: vertical; min-height: 5.5rem; }
+  .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .choices .wide { grid-column: 1 / -1; }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice span {
+    display: block; text-align: center; padding: .95rem .5rem; border-radius: .9rem; cursor: pointer;
+    font-weight: 700; box-shadow: inset 0 0 0 2px var(--ink);
+  }
+  .choice input:checked + span { background: var(--ink); color: var(--cream); box-shadow: none; }
+  .choice input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .result { margin-top: 2rem; max-width: 36rem; background: var(--blue-deep); color: var(--cream); border-radius: 1.2rem; padding: 1.25rem; }
+  .result p { margin: 0 0 .75rem; }
+  .result textarea { min-height: 7.5rem; }
+  .contact { font-weight: 700; color: var(--yellow); }
+  .status { min-height: 1.5em; margin: .6rem 0 0; font-weight: 700; }
+
+  .top, .who { margin: 0; padding: 0; list-style: none; display: grid; gap: .75rem; max-width: 36rem; }
+  .top { counter-reset: t; }
+  .top li { counter-increment: t; display: flex; gap: 1rem; align-items: center; background: var(--cream); border-radius: 1.1rem; padding: .9rem 1.1rem; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+  .top li::before { content: counter(t); flex: none; font-family: var(--font-display); font-weight: 900; font-size: 1.8rem; color: var(--blue-deep); min-width: 1.4rem; }
+  .who { display: flex; flex-wrap: wrap; gap: .5rem; max-width: none; }
+  .who li { background: var(--ink); color: var(--cream); border-radius: 99px; padding: .5rem 1rem; font-weight: 700; }
+  footer { background: var(--ink); color: var(--cream); padding-block: 2.25rem 3rem; margin-top: 3rem; text-align: center; font-family: var(--font-display); font-weight: 600; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+
+  @media (max-width: 30rem) {
+    .row { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+    .row dt { padding-top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ribbon-track, .bubbles i, .date::after { animation: none; }
+    #intro { display: none; }
+    .hero .eyebrow, .hero h1 .small, .hero h1 .big, .hero .lede, .hero .date, .hero .actions, .bubbles { animation: none; }
+    html { scroll-behavior: auto; }
+    h1 .big { transition: none; }
+  }
+</style>
+
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="intro" aria-hidden="true"><span>Tu es invité·e</span></div>
+
+<main>
+  <header class="hero wrap">
+    <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+    <p class="eyebrow">Tu es invité·e</p>
+    <h1>
+      <span class="small">Méline fête ses</span>
+      <span class="big" id="big" role="button" tabindex="0" aria-label="Lancer des confettis">25</span>
+      <span class="small">ans</span>
+    </h1>
+    <p class="lede">Une soirée où le spritz sera mis à l'honneur ! (mais pas que…) Dis-moi vite si tu viens !</p>
+    <div class="date" role="text" aria-label="Samedi 17 juillet 2027, dès 19 heures">
+      <span class="d1">Samedi</span>
+      <span class="d2">17 juillet <span class="yr">2027</span></span>
+      <span class="d3">Dès 19H</span>
+    </div>
+    <div class="actions">
+      <a class="btn" href="#reponse">Je réponds</a>
+      <button class="btn ghost" type="button" id="boom">Lancer les confettis</button>
+    </div>
+  </header>
+
+  <div class="ribbon-clip" aria-hidden="true">
+    <div class="ribbon"><div class="ribbon-track" id="track"></div></div>
+  </div>
+
+  <div class="band">
+  <section class="wrap" aria-labelledby="t-count">
+    <h2 id="t-count">Plus que</h2>
+    <div class="count">
+      <div class="tile"><b id="cd-d">--</b><span>jours</span></div>
+      <div class="tile"><b id="cd-h">--</b><span>heures</span></div>
+      <div class="tile"><b id="cd-m">--</b><span>min</span></div>
+      <div class="tile"><b id="cd-s">--</b><span>sec</span></div>
+    </div>
+    <p class="count-note" id="cd-note">avant l'ouverture des portes.</p>
+  </section>
+  </div>
+
+  <section class="wrap" aria-labelledby="t-infos">
+    <div class="ticket">
+      <h2 id="t-infos">Les infos pratiques</h2>
+      <dl class="rows">
+        <div class="row"><dt>Quand</dt><dd><em>Samedi 17 juillet 2027</em>, dès 19 h</dd></div>
+        <div class="row"><dt>Réponse</dt><dd><em>Avant le 31 mai 2027</em></dd></div>
+        <div class="row"><dt>Où</dt><dd>Saint-Jean-Brévelay. L'adresse exacte te sera envoyée très vite.</dd></div>
+        <div class="row"><dt>Tenue</dt><dd>Une touche d'orange, comme un Aperol Spritz, et tu es parfait·e.</dd></div>
+        <div class="row"><dt>À prévoir</dt><dd>Le soleil ☀️, ta bonne humeur et tes quelques idées (voir plus bas).</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="wrap" id="sec-top" aria-labelledby="t-top" hidden>
+    <h2 id="t-top">Le top 3 de la soirée</h2>
+    <ol class="top" id="top"></ol>
+  </section>
+
+  <section class="wrap" id="sec-who" aria-labelledby="t-who" hidden>
+    <h2 id="t-who">Ils viennent</h2>
+    <ul class="who" id="who"></ul>
+  </section>
+
+  <section class="wrap" id="reponse" aria-labelledby="t-rsvp">
+    <h2 id="t-rsvp">Tu viens ?</h2>
+    <p class="deadline">Réponse à rendre <strong>avant le 31 mai 2027</strong>.</p>
+    <form id="rsvp" novalidate>
+      <div>
+        <label for="name">Ton prénom</label>
+        <input type="text" id="name" name="name" autocomplete="given-name" placeholder="Ex. Camille">
+      </div>
+      <fieldset>
+        <legend>Ta réponse</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="presence" value="yes" checked><span>Je viens</span></label>
+          <label class="choice"><input type="radio" name="presence" value="no"><span>Je ne peux pas</span></label>
+        </div>
+      </fieldset>
+      <div id="count-wrap">
+        <label for="people">Nombre de personnes</label>
+        <select id="people" name="people">
+          <option value="1">1 personne</option>
+          <option value="2">2 personnes</option>
+          <option value="3">3 personnes</option>
+          <option value="4">4 personnes</option>
+          <option value="5">5 personnes</option>
+          <option value="6">6 personnes</option>
+          <option value="7">7 personnes</option>
+          <option value="8">8 personnes</option>
+          <option value="9">9 personnes</option>
+          <option value="10">10 personnes</option>
+        </select>
+        <div id="guests" class="guests" hidden></div>
+      </div>
+      <div>
+        <label for="note">Un mot ou une allergie ?</label>
+        <textarea id="note" name="note" placeholder="Ex. Je suis végétarien."></textarea>
+      </div>
+      <fieldset id="sleep-set">
+        <legend>Tu restes dormir ?</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="sleep" value="oui"><span>Je reste dormir</span></label>
+          <label class="choice"><input type="radio" name="sleep" value="non"><span>Je rentre</span></label>
+          <label class="choice wide"><input type="radio" name="sleep" value="peut-etre" checked><span>Je ne sais pas encore</span></label>
+        </div>
+      </fieldset>
+      <fieldset id="anim-set">
+        <legend>Quelles animations te tentent ?</legend>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="anim" value="Atelier spritz : compose le tien"><span>Atelier spritz : compose le tien</span></label>
+          <label class="choice"><input type="checkbox" name="anim" value="Quiz : qui connaît le mieux Méline ?"><span>Quiz : qui connaît le mieux Méline ?</span></label>
+          <label class="choice"><input type="checkbox" name="anim" value="Olympiades de l&#39;apéro"><span>Olympiades de l&#39;apéro</span></label>
+          <label class="choice"><input type="checkbox" name="anim" value="Jeu des binômes"><span>Jeu des binômes</span></label>
+          <label class="choice"><input type="checkbox" name="anim" value="Capsule temporelle : un mot pour dans 5 ans"><span>Capsule temporelle : un mot pour dans 5 ans</span></label>
+          <label class="choice"><input type="checkbox" name="anim" value="Appareils photo jetables"><span>Appareils photo jetables</span></label>
+        </div>
+        <div style="margin-top:1rem">
+          <label for="idea">Une autre idée d'animation ?</label>
+          <input type="text" id="idea" name="idea" placeholder="Ex. un blind test spécial années 2000">
+        </div>
+      </fieldset>
+      <div>
+        <label for="music">Quelles musiques veux-tu entendre ?</label>
+        <textarea id="music" name="music" placeholder="Ex. un titre, un artiste, un style : disco, rap, années 2000…"></textarea>
+      </div>
+      <div><button class="btn" type="submit" id="send">Envoyer ma réponse</button></div>
+    </form>
+
+    <div class="result" id="result" hidden>
+      <p id="result-title"></p>
+      <label for="reply" class="sr" style="position:absolute;left:-9999px">Message de réponse</label>
+      <textarea id="reply" readonly></textarea>
+      <div class="actions"><button class="btn" type="button" id="copy">Copier le message</button></div>
+      <p class="status" id="status" role="status"></p>
+    </div>
+  </section>
+
+  <footer><div class="wrap">Les 25 ans de Méline · 17.07.2027</div></footer>
+</main>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Bulles de spritz */
+  (function () {
+    var box = document.getElementById("bubbles"), html = "";
+    for (var i = 0; i < 110; i++) {
+      var d = (0.5 + Math.random() * 2.6).toFixed(2);
+      var t = (6 + (3.4 - d) * 2.2 + Math.random() * 4).toFixed(1);
+      html += '<i style="--x:' + (Math.random() * 98).toFixed(1) + '%;--y:' + (Math.random() * 100).toFixed(1) +
+        '%;--d:' + d + 'rem;--t:' + t + 's;--delay:-' + (Math.random() * t).toFixed(1) + 's;--sway:' +
+        ((Math.random() - .5) * 3).toFixed(1) + 'rem"></i>';
+    }
+    box.innerHTML = html;
+  })();
+
+  /* Ruban défilant */
+  var phrases = ["Aperol Spritz", "Samedi 17 juillet", "Dès 19 h", "Saint-Jean-Brévelay", "Piste de danse ouverte", "25 ans"];
+  var line = phrases.map(function (p) { return "<span>" + p + " ✦</span>"; }).join("");
+  document.getElementById("track").innerHTML = line + line;
+
+  /* Compte à rebours vers le 21 novembre 2026, 20 h (heure locale du visiteur) */
+  var target = new Date(2027, 6, 17, 19, 0, 0).getTime();
+  var ids = { d: "cd-d", h: "cd-h", m: "cd-m", s: "cd-s" };
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      Object.keys(ids).forEach(function (k) { document.getElementById(ids[k]).textContent = "00"; });
+      document.getElementById("cd-note").textContent = "La fête a commencé. Viens vite !";
+      return;
+    }
+    var s = Math.floor(diff / 1000);
+    var d = Math.floor(s / 86400); s -= d * 86400;
+    var h = Math.floor(s / 3600); s -= h * 3600;
+    var m = Math.floor(s / 60); s -= m * 60;
+    document.getElementById("cd-d").textContent = d;
+    document.getElementById("cd-h").textContent = pad(h);
+    document.getElementById("cd-m").textContent = pad(m);
+    document.getElementById("cd-s").textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* Confettis */
+  var canvas = document.getElementById("confetti");
+  var ctx = canvas.getContext("2d");
+  var parts = [], running = false;
+  var colors = ["#ffe27a", "#fff4e0", "#ffffff", "#b82a00", "#3b0d00"];
+  function resize() {
+    var r = window.devicePixelRatio || 1;
+    canvas.width = innerWidth * r; canvas.height = innerHeight * r;
+    ctx.setTransform(r, 0, 0, r, 0, 0);
+  }
+  resize(); addEventListener("resize", resize);
+  function burst(x, y, n) {
+    if (reduce) return;
+    for (var i = 0; i < n; i++) {
+      var a = Math.random() * Math.PI * 2, v = 4 + Math.random() * 9;
+      parts.push({
+        x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 6,
+        w: 6 + Math.random() * 8, h: 4 + Math.random() * 6,
+        r: Math.random() * 6, vr: (Math.random() - .5) * .4,
+        c: colors[(Math.random() * colors.length) | 0], life: 0
+      });
+    }
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+  function frame() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    parts = parts.filter(function (p) { return p.y < innerHeight + 30 && p.life < 260; });
+    parts.forEach(function (p) {
+      p.vy += .22; p.vx *= .992; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life++;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+    });
+    if (parts.length) requestAnimationFrame(frame); else { running = false; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+  }
+  function centerOf(el) { var b = el.getBoundingClientRect(); return [b.left + b.width / 2, b.top + b.height / 2]; }
+  var big = document.getElementById("big");
+  function fireBig() { var c = centerOf(big); burst(c[0], c[1], 140); }
+  big.addEventListener("click", fireBig);
+  big.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fireBig(); } });
+  document.getElementById("boom").addEventListener("click", function () {
+    burst(innerWidth * .2, innerHeight * .75, 90); burst(innerWidth * .8, innerHeight * .75, 90);
+  });
+  setTimeout(function () { var c = centerOf(big); burst(c[0], Math.max(c[1], 120), 120); }, reduce ? 500 : 3000);
+  document.getElementById("intro").addEventListener("click", function () { this.style.display = "none"; });
+
+  /* Top 3 musiques et personnes confirmées : listes à remplir ici, la section reste cachée tant qu'elle est vide */
+  var TOP3 = [];
+  var CONFIRMES = [];
+  function fill(listId, secId, items) {
+    if (!items.length) return;
+    var ul = document.getElementById(listId);
+    items.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    document.getElementById(secId).hidden = false;
+  }
+  fill("top", "sec-top", TOP3);
+  fill("who", "sec-who", CONFIRMES);
+
+  /* Réponse */
+  var form = document.getElementById("rsvp");
+  var countWrap = document.getElementById("count-wrap");
+  function presence() { return form.elements.presence.value; }
+  var peopleSel = document.getElementById("people");
+  var guestsBox = document.getElementById("guests");
+  function buildGuests() {
+    var n = parseInt(peopleSel.value, 10) || 1;
+    var extra = n - 1, old = [];
+    Array.prototype.forEach.call(guestsBox.querySelectorAll("input"), function (i) { old.push(i.value); });
+    guestsBox.innerHTML = "";
+    for (var k = 0; k < extra; k++) {
+      var wrap = document.createElement("div");
+      var id = "guest" + (k + 1);
+      var lab = document.createElement("label"); lab.setAttribute("for", id); lab.textContent = "Prénom de la personne " + (k + 2);
+      var inp = document.createElement("input"); inp.type = "text"; inp.id = id; inp.name = "guest"; inp.autocomplete = "off"; inp.value = old[k] || "";
+      wrap.appendChild(lab); wrap.appendChild(inp); guestsBox.appendChild(wrap);
+    }
+    guestsBox.hidden = extra === 0 || presence() === "no";
+  }
+  peopleSel.addEventListener("change", buildGuests);
+  buildGuests();
+  form.addEventListener("change", function () { var no = presence() === "no"; countWrap.hidden = no; buildGuests(); document.getElementById("anim-set").hidden = no; document.getElementById("sleep-set").hidden = no; });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = form.elements.name.value.trim();
+    var note = form.elements.note.value.trim();
+    var n = form.elements.people.value;
+    var music = form.elements.music.value.trim();
+    var guests = Array.prototype.map.call(guestsBox.querySelectorAll("input"), function (i) { return i.value.trim(); }).filter(Boolean);
+    var withTxt = guests.length ? " (avec " + guests.join(", ") + ")" : "";
+    var sleepV = form.elements.sleep.value;
+    var sleepTxt = sleepV === "oui" ? " Je reste dormir sur place." : sleepV === "non" ? " Je rentre dormir chez moi." : " Je ne sais pas encore si je reste dormir.";
+    var idea = form.elements.idea.value.trim();
+    var anim = Array.prototype.map.call(form.querySelectorAll("input[name=anim]:checked"), function (i) { return i.value.toLowerCase(); }).join(", ");
+    var who = name ? "C'est " + name + ". " : "";
+    var msg;
+    if (presence() === "yes") {
+      msg = "Coucou Méline ! " + who + "Je confirme ma présence à tes 25 ans le samedi 17 juillet. " +
+        (n === "1" ? "Je serai seul·e." : "Nous serons " + n + withTxt + ".") + sleepTxt + (note ? " " + note : "") +
+        (anim ? " Côté animations, je suis partant·e pour : " + anim + "." : "") +
+        (idea ? " Mon idée d'animation : " + idea + "." : "") +
+        (music ? " Côté musique, j'aimerais : " + music + "." : "") + " À très vite !";
+    } else {
+      msg = "Coucou Méline ! " + who + "Je ne pourrai malheureusement pas venir à tes 25 ans le 17 juillet." +
+        (note ? " " + note : "") + (music ? " Pour la playlist, je te propose : " + music + "." : "") + " Passe une super soirée !";
+    }
+    document.getElementById("reply").value = msg;
+    var res = document.getElementById("result");
+    var title = document.getElementById("result-title");
+    var reply = document.getElementById("reply");
+    var actions = res.querySelector(".actions");
+    var status = document.getElementById("status");
+    var send = document.getElementById("send");
+    var payload = {
+      prenom: name || "(sans prénom)",
+      presence: presence() === "yes" ? "Je viens" : "Je ne peux pas",
+      personnes: presence() === "yes" ? n : "",
+      prenoms_accompagnants: presence() === "yes" ? guests.join(", ") : "",
+      dormir: presence() === "yes" ? (sleepV === "oui" ? "Reste dormir" : sleepV === "non" ? "Rentre" : "Ne sait pas encore") : "",
+      animations: presence() === "yes" ? anim : "",
+      idee_animation: idea,
+      musiques: music,
+      mot_ou_allergie: note
+    };
+    function showResult(ok) {
+      res.hidden = false;
+      status.textContent = "";
+      if (ok) {
+        title.textContent = presence() === "yes" ? "C'est envoyé, merci ! Méline a bien reçu ta réponse. À très vite !" : "C'est envoyé, merci ! Méline a bien reçu ta réponse.";
+        reply.hidden = true; actions.hidden = true;
+        if (presence() === "yes") { var c = centerOf(res); burst(c[0], c[1], 90); }
+      } else {
+        title.textContent = "L'envoi n'a pas marché. Copie ce message et envoie-le à Méline par message.";
+        reply.hidden = false; actions.hidden = false;
+      }
+      res.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    }
+    send.disabled = true; send.textContent = "Envoi en cours…";
+    var done = false;
+    function finish(ok) { if (done) return; done = true; send.disabled = false; send.textContent = "Envoyer ma réponse"; showResult(ok); }
+    try {
+      fetch("https://formspree.io/f/xdegenqn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (r) { finish(r.ok); }, function () { finish(false); });
+    } catch (err) { finish(false); }
+    setTimeout(function () { finish(false); }, 12000);
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    var ta = document.getElementById("reply"), st = document.getElementById("status");
+    function fallback() { ta.focus(); ta.select(); st.textContent = "Sélectionné. Copie-le avec le menu de ton téléphone."; }
+    try {
+      navigator.clipboard.writeText(ta.value).then(function () { st.textContent = "Copié !"; }, fallback);
+    } catch (err) { fallback(); }
+  });
+})();
+</script>
+
+</body>
+</html>
